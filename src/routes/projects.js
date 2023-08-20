@@ -19,6 +19,17 @@ router.post("/", async (req, res) => {
 	}
 });
 
+// Get  projects
+router.get("/:projectId", async (req, res) => {
+	try {
+		const { projectId } = req.params;
+		const projects = await Project.findById(projectId);
+		res.json(projects);
+	} catch (error) {
+		res.status(500).json({ error: error });
+	}
+});
+
 // Get all projects
 router.get("/", async (req, res) => {
 	try {
