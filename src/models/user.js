@@ -14,7 +14,7 @@ const userSchema = new mongoose.Schema(
 	{
 		toJSON: {
 			transform: function (doc, ret) {
-				ret.Id = ret._id;
+				ret.id = ret._id;
 				delete ret._id;
 				delete ret.__v;
 			},

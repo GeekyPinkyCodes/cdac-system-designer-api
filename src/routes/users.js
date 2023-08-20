@@ -38,6 +38,22 @@ router.get("/:userId", async (req, res) => {
 	}
 });
 
+// Get a user by email
+router.get("/getByEmail/:email", async (req, res) => {
+	try {
+		console.log("Get a user by Email");
+		const { email } = req.params;
+		const user = await User.findOne({ email: email });
+		if (user) {
+			res.json(user);
+		} else {
+			res.status(404).json({ error: "Invalid Email: " + email });
+		}
+	} catch (error) {
+		res.status(500).json({ error: error });
+	}
+});
+
 // Get all users
 router.get("/", async (req, res) => {
 	try {
