@@ -3,17 +3,38 @@ const express = require("express");
 const router = express.Router();
 const Project = require("../models/project");
 
+const ProjectsDirectory = "resources/projects";
+
 // Create a new project
 router.post("/", async (req, res) => {
 	try {
-		const { name, fileName } = req.body;
-
+		const { name } = req.body;
+		if (!name.trim()) {
+			res.status(400).json({ error: "Invalid Project Name" });
+		}
+		const fileName = name.trim() + ".xml";
+		var fileContent = "<types></types>";
 		const project = new Project({
 			name,
 			fileName,
+			fileContent,
 		});
 		await project.save();
 		res.status(201).json(project);
+	} catch (error) {
+		res.status(500).json({ error: error });
+	}
+});
+
+//save file
+router.put("/:projectId/_save", async (req, res) => {
+	try {
+		const { projectId } = req.params;
+		const { content } = req.body;
+		await Project.findByIdAndUpdate(projectId, {
+			fileContent: content,
+		});
+		res.status(200);
 	} catch (error) {
 		res.status(500).json({ error: error });
 	}
